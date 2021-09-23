@@ -3,6 +3,7 @@ import waveDraw from '../lib/waveDraw';
 import { makeStyles } from '@material-ui/core/styles';
 import TimeBar from '../components/TimeBar';
 import { LinearProgress } from '@material-ui/core';
+import { useSampler } from './SamplerProvider';
 
 const styling = makeStyles( theme => ({
   container: {
@@ -27,18 +28,15 @@ const styling = makeStyles( theme => ({
 const WaveEditor = createContext();
 
 const Wavetable = React.forwardRef( (props, cnv) => {
-  
   if (!cnv) cnv = useRef(null);   //fallback for the forwarded ref
   const box = useRef(null);
   const classes = styling();
-
+  const {clipArea} = useSampler();
   const [plotted, setPlot] = useState(false);
   const [resolution, setRes] = useState(0); // points per pixel
   const [minRes, setMin] = useState(null);
-  const [clipArea, setClipArea] = useState([0,100]);
   const [seekPos, setSeek] = useState(0);
   const [isPlaying, setPlay] = useState(false);
-
   const tools = props.children.find(child => child.type.name == 'Tools');
   const innerChild = React.Children.map(props.children, child => {
     if (child.type.name == "Tools") return;
@@ -82,22 +80,16 @@ const Wavetable = React.forwardRef( (props, cnv) => {
       });
     }
   });
-
-  const shadeStart = () => {
-    return ({
-      left: 0,
-      width: (clipArea[0] * .01 * (cnv.current ? cnv.current.width : 0))+'px'
-    })
-  }
-  const shadeEnd = () => {
-    return ({
-      left: clipArea[1] * .01 * (cnv.current ? cnv.current.width : 0)+'px',
-      width: (100-clipArea[1]) * .01 * (cnv.current ? cnv.current.width : 0)+'px'
-    })}
-
+  const shadeStart = () => ({
+    left: 0,
+    width: (clipArea[0] * .01 * (cnv.current ? cnv.current.width : 0))+'px'
+  })
+  const shadeEnd = () => ({
+    left: clipArea[1] * .01 * (cnv.current ? cnv.current.width : 0)+'px',
+    width: (100-clipArea[1]) * .01 * (cnv.current ? cnv.current.width : 0)+'px'
+  })
   return (
-    <WaveEditor.Provider value={{src: props.source, cnv, box, 
-      clipArea, setClipArea, isPlaying, setPlay, seekPos, setSeek }}>
+    <WaveEditor.Provider value={{src: props.source, cnv, box, isPlaying, setPlay, seekPos, setSeek}}>
       <div ref={box} className={[props.className, classes.container].join(' ')} style={props.style} >
         <TimeBar />
         <canvas ref={cnv} />

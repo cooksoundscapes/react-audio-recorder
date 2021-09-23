@@ -1,8 +1,10 @@
 import { useEditor } from './WaveTable';
+import { useSampler } from './SamplerProvider';
 import { useEffect, useRef } from 'react';
 
 const PlayBar = ({parentWidth}) => {
-    const {cnv, src, isPlaying, clipArea, seekPos} = useEditor();
+    const {clipArea} = useSampler();
+    const {cnv, src, isPlaying, seekPos} = useEditor();
     const bar = useRef(null);
     let animId;
 

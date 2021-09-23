@@ -4,7 +4,6 @@ import PublishIcon from '@material-ui/icons/Publish';
 import HelpIcon from '@material-ui/icons/Help';
 import CheckIcon from '@material-ui/icons/Check';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import ErrorIcon from '@material-ui/icons/Error';
 import { LinearProgress, Box, Fade, Grid, Fab, IconButton} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -44,7 +43,7 @@ const Begin = () => {
     const [upload, setUpload] = useState(null);
     const scope = useRef();
     const wavePlot = useRef();
-    const {dsp, startDSP, setRecords} = useSampler();
+    const {dsp, startDSP, setRecords, setClipArea} = useSampler();
 
     useEffect( () => {  
         if (!dsp && recState == ('recording' || 'uploading')) startDSP();  
@@ -52,15 +51,17 @@ const Begin = () => {
             asyncReadFile(upload).then( arrBuff => {
                 dsp.decodeAudioData(arrBuff).then( audioBuff => {
                     waveDraw(audioBuff, wavePlot).then( staticImg => {
-    
                         setRecords({buffer: audioBuff, img: staticImg});
                         setRec('done');
+                        setClipArea([0,100]);
                     });
                 }).catch( err => console.log(err));
             }).catch( err => console.log(err));
         } else if (dsp && recState == 'recording') {
             recordAudio(dsp, scope, wavePlot).then( newRec => {
                 setRecords(newRec);
+                setRec('done');
+                setClipArea([0,100]);
             })
             .catch( err => {
                 setRec('error');

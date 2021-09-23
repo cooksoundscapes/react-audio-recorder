@@ -7,7 +7,8 @@ import PauseIcon from '@material-ui/icons/Pause';
 import StopIcon from '@material-ui/icons/Stop';
 
 const ClipTransport = props => {
-    const {src, cnv, clipArea, isPlaying, setPlay, seekPos, setSeek} = useEditor();
+    const {clipArea} = useSampler();
+    const {src, isPlaying, setPlay, seekPos, setSeek} = useEditor();
     const [pausedAt, setPaused] = useState(0);
     const {dsp} = useSampler();
     const playRef = useRef();

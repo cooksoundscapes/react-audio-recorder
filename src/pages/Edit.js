@@ -9,6 +9,7 @@ import Inspector from '../components/Inspector';
 import { useSampler } from '../components/SamplerProvider';
 import DragBar from '../components/DragBar';
 import PlayBar from '../components/PlayBar';
+import renderWavFile from '../lib/renderWavFile';
 import { useHistory, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -31,7 +32,7 @@ const styles = makeStyles( ({spacing}) => ({
 const Tools = ({children}) => <>{children}</>
 
 const Edit = () => {
-    const {records} = useSampler();
+    const {dsp, records, clipArea} = useSampler();
     const classes = styles();
     const history = useHistory();
     
@@ -40,6 +41,7 @@ const Edit = () => {
             history.push('/');
         }
     })
+
     return (    
         <Grid className={classes.grid} container direction='column' alignItems='center' >
             <Typography variant='h5'>Chop if needed</Typography>
@@ -53,11 +55,15 @@ const Edit = () => {
                     <ClipInfo />
                 </Tools>
             </WaveTable>
+            <Typography variant='subtitle1'>Click next to render clipped wave file.</Typography>
             <Grid container justifyContent='space-between'>
                 <Link to={'/'}>
-                    <Fab color='primary' aria-label='prev-button' className={classes.nav}> <NavigateBeforeIcon /> </Fab>
+                    <Fab color='primary' aria-label='prev-button' 
+                         className={classes.nav}> <NavigateBeforeIcon /> </Fab>
                 </Link>
-                <Fab color='primary' aria-label='next-button' className={classes.nav}> <NavigateNextIcon /> </Fab>
+                <Fab color='primary' aria-label='next-button' className={classes.nav}
+                     onClick={() => renderWavFile(records.buffer, clipArea, dsp.sampleRate)}> 
+                     <NavigateNextIcon /> </Fab>
             </Grid>
         </Grid>
     )

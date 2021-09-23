@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
 import { Tooltip } from '@material-ui/core';
 import { useEditor } from './WaveTable';
+import { useSampler } from './SamplerProvider';
 
 const mkclasses = makeStyles( ({palette}) => ({
     touchArea: {
@@ -53,8 +54,9 @@ const DragBar = props => {
     const types = mkclasses();
     const [pos, setPos] = useState(null);
     const [ratio, setRatio] = useState(props.position)
-    const {cnv, box, src, clipArea, setClipArea} = useEditor();
-    
+    const {clipArea, setClipArea} = useSampler();
+    const {cnv, box, src} = useEditor();
+
     useEffect( () => {
         const maxLeft = cnv.current ? cnv.current.width : 0;
         let newRatio = pos ? (pos / maxLeft) * 100 : props.position;

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { useEditor } from './WaveTable';
+import { useSampler } from './SamplerProvider';
 import PlayBar from './PlayBar';
 
 const boxStyles = makeStyles( ({palette, spacing}) => ({
@@ -31,7 +32,8 @@ const boxStyles = makeStyles( ({palette, spacing}) => ({
 const Inspector = ({staticImg}) => {
     const classes = boxStyles();
     const [scrolled, setScrolled] = useState(0);
-    const {cnv, box, clipArea} = useEditor();
+    const {clipArea} = useSampler();
+    const {cnv, box} = useEditor();
     const containerRef = useRef();
 
     useEffect( () => {

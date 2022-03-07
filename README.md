@@ -1,4 +1,4 @@
-## Basic audio components
+## Basic audio recorder
 
 That project contains a example recorder with custom made React components with audio editing purposes, styled with Material UI basic theme. It's included:  
 

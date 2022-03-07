@@ -13,7 +13,8 @@ That project contains a example recorder with custom made React components with 
   * Zooming the waveform for details (mouse wheel only, for now) *;
   * Inspector for monitor the full length when zooming;
 * Download a rendered audio file with the selected start/end trimming;
-  
+
+![](recorder-example.gif)
 
 \*: Somewhat large files might lag when zooming;
   
